@@ -130,9 +130,16 @@ class AndroidGenerator:
         try:
             in_file = open(in_file_path)
             out_file = open(out_file_path, "w")
-            
-            for line in in_file:
-                out_file.write(line)
+            contents = in_file.read()
+
+            contents = re.sub(PACKAGE, self.values[PACKAGE], contents)
+            contents = re.sub(CLASS_NAME, self.values[CLASS_NAME], contents)
+            contents = re.sub(LAYOUT_CLASS_NAME, self.values[LAYOUT_CLASS_NAME], contents)
+
+            out_file.write(contents)
+
+            #for line in in_file:
+             #   out_file.write(line)
 
             in_file.close()
             out_file.close()
@@ -168,10 +175,10 @@ class AndroidGenerator:
                 self.values[param[0]] = param[1].replace("\n","")
 
     def set_parameters(self, argv):
-        self.values[TYPE] = argv[0].lower()
-        self.values[CLASS_NAME] = argv[1]
+        self.values[TYPE] = argv[0].lower() #template type
+        self.values[CLASS_NAME] = argv[1] #class name
         if (len(argv) > 2):
-            self.values[LAYOUT_CLASS_NAME] = argv[2].lower()
+            self.values[LAYOUT_CLASS_NAME] = argv[2].lower() #layout name
         else:
             self.values[LAYOUT_CLASS_NAME] = self.infer_layout_name()
 
